@@ -1,0 +1,16 @@
+services:
+  # The Racket Application Service
+  # It is NOT exposed to the outside world. It only talks to Flask.
+  racket-app:
+    build:
+      context: ./racket
+
+  # The Flask Application Service
+  # It IS exposed, so users can interact with it.
+  flask-app:
+    build:
+      context: ./flask
+    ports:
+      - "5000:5000" # Map port 5000 on your machine to port 5000 in the Flask container
+    depends_on:
+      - racket-app
