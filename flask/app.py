@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Get the Racket service URL from an environment variable for flexibility,
 # with a default for local docker-compose runs.
-RACKET_API_URL = os.getenv("RACKET_URL", "http://localhost:8000/compute")
+RACKET_API_URL = os.getenv("RACKET_URL", "http://racket-app:8000/compute")
 
 @app.route('/')
 def index():
