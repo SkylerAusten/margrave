@@ -1,23 +1,24 @@
 #lang racket
 (require web-server/servlet
          web-server/servlet-env
-         json)
-(require margrave)
+         json
+         racket/system) ; For executing external scripts
 
 (define (start req)
-  (define json-body (request-post-data/raw req))
-  (define parsed-data (string->jsexpr (bytes->string/utf-8 json-body)))
+  ;; Execute the Margrave DSL script
+  (define-values (exit-code stdout stderr)
+    (system* "/usr/bin/racket" "/app/analysis.rkt"))
 
-  ;; Example Margrave operations
-  (define policy1 (load-policy "*MARGRAVE*/tests/conference1.p"))
-  (define policy2 (load-policy "*MARGRAVE*/tests/conference2.p"))
-  (define exploration (xml-explore-result->id policy1 "permit(s, a, r)"))
-  (define result (xml-make-show-realized-command exploration))
-
-  ;; Return the result as JSON
-  (response/output
-   (lambda (out)
-     (displayln (jsexpr->string (hash 'result result)) out))))
+  ;; Check if the script executed successfully
+  (if (zero? exit-code)
+      ;; Return the script's output as JSON
+      (response/output
+       (lambda (out)
+         (write-json (hash 'result stdout) out))) ; Return stdout as JSON
+      ;; Return an error if the script failed
+      (response/output
+       (lambda (out)
+         (write-json (hash 'error stderr) out))))) ; Return stderr as JSON
 
 (serve/servlet start
                #:port 8000
