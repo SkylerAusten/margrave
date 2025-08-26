@@ -5,9 +5,16 @@
          racket/system) ; For executing external scripts
 
 (define (start req)
-  ;; Execute the Margrave DSL script
+  ;; Execute the Margrave DSL script and capture stdout and stderr
   (define-values (exit-code stdout stderr)
-    (system*/exit-code "/usr/bin/racket" "/app/analysis.rkt"))
+    (let ([stdout-port (open-output-string)]
+          [stderr-port (open-output-string)])
+      (parameterize ([current-output-port stdout-port]
+                     [current-error-port stderr-port])
+        (values
+         (system/exit-code "/usr/bin/racket /app/analysis.rkt")
+         (get-output-string stdout-port)
+         (get-output-string stderr-port)))))
 
   ;; Check if the script executed successfully
   (if (zero? exit-code)
