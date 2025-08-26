@@ -7,7 +7,7 @@
 (define (start req)
   ;; Execute the Margrave DSL script
   (define-values (exit-code stdout stderr)
-    (system* "/usr/bin/racket" "/app/analysis.rkt"))
+    (system*/exit-code "/usr/bin/racket" "/app/analysis.rkt"))
 
   ;; Check if the script executed successfully
   (if (zero? exit-code)
