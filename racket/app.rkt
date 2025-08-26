@@ -1,25 +1,26 @@
 #lang racket
 (require web-server/servlet
-         web-server/servlet-env)
+         web-server/servlet-env
+         json)
+(require margrave)
 
-;; A placeholder for your real Margrave computation
-(define (run-margrave-computation input-jsexpr)
-  ;; 1. Decode the JSON input from Flask
-  (define input-data (jsexpr->string input-jsexpr))
-  
-  ;; 2. TODO: Call your actual Margrave code with the input-data
-  (printf "Racket received: ~a\n" input-data)
-  (define result-string (string-append "Computed result for " input-data))
-  
-  ;; 3. Encode the result back into JSON to send to Flask
-  (string->jsexpr (format "{\"result\": \"~a\"}" result-string)))
-
-;; This is our API endpoint
 (define (start req)
-  (response/jsexpr
-   (run-margrave-computation (request-post-jsexpr req))))
+  (define json-body (request-post-data/raw req))
+  (define parsed-data (string->jsexpr (bytes->string/utf-8 json-body)))
+
+  ;; Example Margrave operations
+  (define policy1 (load-policy "*MARGRAVE*/tests/conference1.p"))
+  (define policy2 (load-policy "*MARGRAVE*/tests/conference2.p"))
+  (define exploration (xml-explore-result->id policy1 "permit(s, a, r)"))
+  (define result (xml-make-show-realized-command exploration))
+
+  ;; Return the result as JSON
+  (response/output
+   (lambda (out)
+     (displayln (jsexpr->string (hash 'result result)) out))))
 
 (serve/servlet start
                #:port 8000
                #:listen-ip "0.0.0.0"
-               #:servlet-path "/compute")
+               #:servlet-path "/compute"
+               #:launch-browser? #f) ; Disable browser launch
