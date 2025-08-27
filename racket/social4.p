@@ -1,20 +1,14 @@
 (Policy SocialPolicy4 uses SocialMediaVocab
   (Target)
   (Rules
-    ;; Family members can always view
-    (FamilyPermit = (Permit s a r) :-
-                    (CanViewAsFamily s r) (Owns u r) (ReadPost a) (Post r))
+    (DenyCoworkersNotFamily = (Deny s a r) :-
+        (ReadPost a) (Owns s r) (MemberOf s Coworkers) (!MemberOf s Family))
 
-    ;; Friends can view, unless also coworkers
-    (FriendPermit = (Permit s a r) :-
-                    (CanViewAsFriend s r) (Owns u r) (ReadPost a) (Post r))
+    (PermitFriendsView = (Permit s a r) :-
+        (ReadPost a) (Owns s r) (MemberOf s Friends) (SharedWith r Friends))
 
-    ;; Explicit coworker block — overrides friend view
-    (CoworkerDeny = (Deny s a r) :-
-                    (CanViewAsCoworker s r) (Owns u r) (ReadPost a) (Post r)))
-  
-  ;; Deny overrides ensures coworkers cannot see, 
-  ;; even if friend or family rules would permit
-  (RComb O Deny Permit)
-  (PComb O Deny Permit)
+    (PermitFamilyView = (Permit s a r) :-
+        (ReadPost a) (Owns s r) (MemberOf s Family) (SharedWith r Family)))
+  (RComb FAC)
+  (PComb FAC)
   (Children))

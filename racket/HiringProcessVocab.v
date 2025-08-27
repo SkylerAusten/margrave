@@ -1,0 +1,26 @@
+(PolicyVocab HiringProcessPolicy
+  (Types
+    (Subject : Applicant Reviewer Manager)
+    (Action : SubmitApplication ReadApplication ExtendOffer)
+    (Resource : Application Offer)
+  )
+  (Decisions Permit Deny)
+  (Predicates
+    (BeforeDeadline : Application)
+    (AfterDeadline : Application)
+    (AfterReviewPhase : Application)
+    (Submitted : Applicant Application)
+    (Reviewed : Reviewer Application))
+  (ReqVariables (s : Subject)
+                (a : Action)
+                (r : Resource))
+  (OthVariables )
+  (Constraints
+    (disjoint-all Resource)
+    (disjoint-all Action)
+    (atmostone-all Action)
+    (abstract Subject)
+    (abstract Action)
+    (abstract Resource)
+    (nonempty Subject)
+    (nonempty Resource)))

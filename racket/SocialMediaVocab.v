@@ -1,36 +1,42 @@
 (PolicyVocab SocialMediaVocab
   (Types
     (Subject : User)
-    (Action : CreatePost ReadPost DeletePost SharePost)
+    (Action : CreatePost ReadPost)
     (Resource : Post)
-    (Group : Friend Family Coworker)
-  )
-  (Decisions Permit Deny)
+    (Group : Friends Family Coworkers))
+  
+  (Decisions
+    Permit
+    Deny)
+  
   (Predicates
-    ;; Relationship predicates
-    (FriendOf : User User)
-    (FamilyOf : User User)
-    (CoworkerOf : User User)
-
-    ;; Ownership predicates
     (Owns : User Post)
-
-    ;; Membership convenience predicates
-    (CanViewAsFriend : User Post)
-    (CanViewAsFamily : User Post)
-    (CanViewAsCoworker : User Post)
-  )
-  (ReqVariables (s : Subject)   ;; subject (viewer)
-                (a : Action)    ;; action
-                (r : Resource)) ;; post
-  (OthVariables (u : User))     ;; post owner, etc.
+    (SharedWith : Post Group)
+    (MemberOf : User Group))
+  
+  (ReqVariables
+    (s : Subject)
+    (a : Action)
+    (r : Resource))
+  
+  (OthVariables
+    (g: Group))
+  
   (Constraints
-    (disjoint-all Resource)
+    ; Top-level types with multiple subtypes are disjoint.
     (disjoint-all Action)
     (disjoint-all Group)
+    
+    ; Actions are atomic
     (atmostone-all Action)
+    
+    ; No undeclared types exist outside the declared subtypes
     (abstract Subject)
     (abstract Action)
     (abstract Resource)
+    (abstract Group)
+    
+    ; There must exist at least one user and one post
     (nonempty Subject)
-    (nonempty Resource)))
+    (nonempty Resource)
+    (nonempty Group)))

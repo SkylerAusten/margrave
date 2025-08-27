@@ -1,14 +1,14 @@
 (Policy SocialPolicy1 uses SocialMediaVocab
   (Target)
   (Rules
-    (FamilyView = (Permit s a r) :-
-                  (FamilyOf s u) (Owns u r) (ReadPost a) (Post r))
+    (PostToFriendsOrFamily = (Permit s a r) :-
+        (ReadPost a) (Owns s r) (MemberOf s Friends) (SharedWith r Friends))
 
-    (FriendView = (Permit s a r) :-
-                  (FriendOf s u) (Owns u r) (ReadPost a) (Post r) (!CoworkerOf s u))
+    (PostToFamilyOverridesCoworker = (Permit s a r) :-
+        (ReadPost a) (Owns s r) (MemberOf s Family) (SharedWith r Family))
 
-    (CoworkerBlock = (Deny s a r) :-
-                     (CoworkerOf s u) (Owns u r) (ReadPost a) (Post r)))
+    (CoworkersDenied = (Deny s a r) :-
+        (ReadPost a) (Owns s r) (MemberOf s Coworkers) (!MemberOf s Family)))
   (RComb FAC)
   (PComb FAC)
   (Children))
