@@ -1,54 +1,68 @@
 # Social Media Account Control Policy
 ## Natural Language Context
-On a social media platform, users can share posts with different groups: their friends, their workplace network, or their school alumni network.
+On a social media platform, users can share posts with different groups: their friends, their family, or their coworkers.
 
 ## Vocabulary
 ```
 (PolicyVocab SocialMediaPolicy
   (Types
-    (Subject : User Friend Coworker Alumni Moderator)
-    (Action : CreatePost ReadPost DeletePost)
+    (Subject : User)
+    (Action : CreatePost ReadPost DeletePost SharePost)
     (Resource : Post)
+    (Group : Friend Family Coworker)
   )
   (Decisions Permit Deny)
   (Predicates
-    (Owns : User Post)
+    ;; Relationship predicates
     (FriendOf : User User)
-    (InWorkNetwork : User)
-    (InAlumniNetwork : User)
-    (RuleViolation : Post))
-  (ReqVariables (s : Subject)
-                (a : Action)
-                (r : Resource))
-  (OthVariables )
+    (FamilyOf : User User)
+    (CoworkerOf : User User)
+
+    ;; Ownership predicates
+    (Owns : User Post)
+
+    ;; Membership convenience predicates
+    (CanViewAsFriend : User Post)
+    (CanViewAsFamily : User Post)
+    (CanViewAsCoworker : User Post)
+  )
+  (ReqVariables (s : Subject)   ;; subject (viewer)
+                (a : Action)    ;; action
+                (r : Resource)) ;; post
+  (OthVariables (u : User))     ;; post owner, etc.
   (Constraints
     (disjoint-all Resource)
     (disjoint-all Action)
+    (disjoint-all Group)
     (atmostone-all Action)
     (abstract Subject)
     (abstract Action)
     (abstract Resource)
     (nonempty Subject)
     (nonempty Resource)))
-
 ```
 
 ## Natural Language Policy
-Users may share posts with friends but not coworkers, even if those coworkers are also friends.
+The user wants to share posts with friends and family. Coworkers may never see these posts, even if they are also friends. However, family members may see the post even if they are also coworkers.
 
 ## Policy 1
+
 ```
-// Deny first
-(Policy SocialMediaPolicy1 uses SocialMediaPolicy
-  (Target )
+(Policy SocialPolicy1 uses SocialMediaPolicy
+  (Target)
   (Rules
-    (FriendAccess = (Permit s a r) :- (FriendOf s u) (Owns u r) (ReadPost a) (!InWorkNetwork s))
-    (ModeratorDelete = (Permit s a r) :- (Moderator s) (DeletePost a) (RuleViolation r))
-    (CoworkerDeny = (Deny s a r) :- (InWorkNetwork s) (ReadPost a) (Owns u r))
-  )
-  (RComb O Deny Permit)
+    (FamilyView = (Permit s a r) :-
+                  (FamilyOf s u) (Owns u r) (ReadPost a) (Post r))
+
+    (FriendView = (Permit s a r) :-
+                  (FriendOf s u) (Owns u r) (ReadPost a) (Post r) (!CoworkerOf s u))
+
+    (CoworkerBlock = (Deny s a r) :-
+                     (CoworkerOf s u) (Owns u r) (ReadPost a) (Post r)))
+  (RComb FAC)
   (PComb FAC)
-  (Children ))
+  (Children))
+
 ```
 
 
