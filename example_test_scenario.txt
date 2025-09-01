@@ -1,0 +1,18 @@
+TestPolicy1
+TestPolicy2
+Query created successfully.
+********* SOLUTION FOUND at size = 3 ******************
+a: createpost 
+s: user 
+r: post 
+coworkerof = {[s, s]}
+sharedwith = {}
+familyof = {}
+owns = {[s, r]}
+friendof = {}
+
+STATISTICS: 
+Margrave computed that 3 would be a sufficient size ceiling.
+No ceiling explicitly provided in the query's CEILING clause.
+Used size ceiling: 3
+********************************************************

@@ -1,0 +1,10 @@
+a: readpost
+s: user
+r: post
+canviewasfriend = {}
+canviewascoworker = {[s, r]}
+owns = {[s, r]}
+friendof = {}
+coworkerof = {[s, s]}
+canviewasfamily = {}
+familyof = {[s, s]}
