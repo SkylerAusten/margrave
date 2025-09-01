@@ -18,9 +18,8 @@ RUN apt-get update && apt-get install -y \
 # Copy the Racket application code into the container
 COPY app.rkt /app/
 COPY analysis.rkt /app/
-COPY conference* /app/
-COPY social* /app/
-COPY SocialMediaVocab.v /app/
+COPY *.v /app/
+COPY *.p /app/
 
 # Set the working directory inside the container
 WORKDIR /app
