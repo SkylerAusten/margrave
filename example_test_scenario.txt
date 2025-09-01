@@ -1,18 +1,18 @@
-TestPolicy1
-TestPolicy2
+********************************************************
 Query created successfully.
-********* SOLUTION FOUND at size = 3 ******************
-a: createpost 
-s: user 
+********* SOLUTION FOUND at size = 4 ******************
 r: post 
-coworkerof = {[s, s]}
-sharedwith = {}
-familyof = {}
-owns = {[s, r]}
+s2: user2 
+a: readpost 
+s1: user1 
+sharedwith = {[r, s2]}
+owns = {}
 friendof = {}
+coworkerof = {[s2, s1], [s1, s2], [s1, s1]}
+familyof = {[s2, s1], [s1, s2], [s1, s1]}
 
 STATISTICS: 
-Margrave computed that 3 would be a sufficient size ceiling.
+Margrave computed that 4 would be a sufficient size ceiling.
 No ceiling explicitly provided in the query's CEILING clause.
-Used size ceiling: 3
+Used size ceiling: 4
 ********************************************************

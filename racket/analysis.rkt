@@ -3,10 +3,10 @@
 LOAD POLICY "/app/test1.p";
 LOAD POLICY "/app/test2.p";
 
-EXPLORE TestPolicy1:permit(s, a, r);
+EXPLORE TestPolicy1:permit(s1, s2, a, r);
 SHOW ONE;
 
-EXPLORE TestPolicy2:permit(s, a, r);
+EXPLORE TestPolicy2:permit(s1, s2, a, r);
 SHOW ONE;
 
 COMPARE TestPolicy1 TestPolicy2;
