@@ -7,14 +7,14 @@ The user wants to share a post with friends and family. Coworkers should never s
 
 # Spy Ring (Different Context)
 ## Natural Language Context
-In a spy ring, spies can share intelligence reports with different groups: other spies, their handlers, and government officials.
+In a spy ring, spies can share intelligence reports with different groups: other spies, their supervisors, and government officials.
 
 ## Natural Language Policy
-The spy wants to share an intelligence report with other spies and their handler. Government officials may never see this report, even if they are also spies. However, their handlers may see the report even if they are also government officials.
+The spy wants to share an intelligence report with other spies and their supervisors. Government officials may never see this report, even if they are also spies. However, their supervisors may see the report even if they are also government officials.
 
 # Three Roles + "Special Individual" (Student + TA)
 ## Natural Language Context
-At a university, students can submit assignments, TAs can grade assignments, and professors can assign grades.
+At a university, students can submit assignments, teaching assistants (TAs) can grade assignments, and professors can assign grades.
 
 ## Natural Language Policy
 Students may submit assignments. TAs may grade assignments. Professors may assign final grades. If a person is both a student and a TA, they may grade others’ assignments but not their own.
