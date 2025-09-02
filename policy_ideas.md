@@ -5,7 +5,7 @@ On a social media platform, users can share posts with different groups: their f
 ## Natural Language Policy
 The user wants to share a post with friends and family. Coworkers should never see this post, even if they are also friends. However, family members can see the post even if they are also coworkers.
 
-# Spy Ring (Wason's Task)
+# Spy Ring (Different Context)
 ## Natural Language Context
 In a spy ring, spies can share intelligence reports with different groups: other spies, their handlers, and government officials.
 
